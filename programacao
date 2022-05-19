@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define n_pc 25
+
+struct data {
+int dia, mes, ano;
+};
+
+struct geral {
+int numero_id [20];
+char designacao [50];
+char nome_colaborador_pc[50];
+struct data data_atribuicao;
+char estaduo_pc[50];
+};
+
+
+
+int main ()
+{
+
+printf("\n\n\n\n\t\t\t\t\tGestão de Computadores Portáteis\n\n");
+printf("Total de Computadores: %d\t\t\t",contador);
+printf("Valor dos Computadores(euros):(memoria a definir)\n");
+printf("Intervenções Solicitadas:\t\t\t\t\t");
+printf("Intervenções Efetuadas:(memoria a definir)\n\n");
+
+printf("1. Novo Computador\n");
+printf("2. Solicitar Intervenção\n");
+printf("3. Registar Intervenção\n");
+printf("4. Listar\n");
+printf("5. Informações\n");
+printf("6. Gravar\n");
+printf("0. Sair\n\n");
+printf("Selecione a Opção:");
+}
+
