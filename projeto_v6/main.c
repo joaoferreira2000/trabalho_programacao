@@ -1,7 +1,8 @@
- #include <stdio.h>
+    #include <stdio.h>
     #include <string.h>
     #include <stdlib.h>
     #include <time.h>
+    #include <ctype.h>
 
 
 
@@ -19,7 +20,7 @@
 
     typedef struct
     { // e struct designe para guardar a info sobre pcs
-    char numero_id[25];
+    int numero_id[25];
     char designacao [100] ;
     char nome_colaborador_pc [100];
     t_data data_atribuicao;
@@ -113,17 +114,17 @@ int main ()
 
 void funcao_menu (t_pc novo_pc[], cont numero)
 {
-        printf("\n\n\n\n\t\t\t\t\tGestï¿½o de Computadores Portï¿½teis\n\n");
+        printf("\n\n\n\n\t\t\t\t\tGestão de Computadores Portáteis\n\n");
         printf("Total de Computadores:%d \t\t\t",numero.n_pcs);
         printf("Valor dos Computadores(euros):%.2f\n",numero.valor_total);
-        printf("Intervenï¿½ï¿½es Solicitadas:%d\t\t\t\t\t",numero.n_soli_intre);
-        printf("Intervenï¿½ï¿½es Efetuadas:%d \n\n",numero.n_regis_intre);
+        printf("Intervenções Solicitadas:%d\t\t\t\t\t",numero.n_soli_intre);
+        printf("Intervenções Efetuadas:%d \n\n",numero.n_regis_intre);
 
         printf("1. Novo Computador\n");
-        printf("2. Solicitar Intervenï¿½ï¿½o\n");
-        printf("3. Registar Intervenï¿½ï¿½o\n");
+        printf("2. Solicitar Intervenção\n");
+        printf("3. Registar Intervenção\n");
         printf("4. Listar\n");
-        printf("5. Informaï¿½ï¿½es\n");
+        printf("5. Informações\n");
         printf("6. Gravar\n");
         printf("0. Sair\n\n");
 
@@ -133,68 +134,58 @@ void funcao_menu (t_pc novo_pc[], cont numero)
 
 void adc_computador(t_pc novo_pc[],cont numero)
 {
-        int  i,z,x,repeat,do_ok,valor,f_dia,f_mes,f_ano;
-        char f_numero_id[25],f_designacao [100], f_nome_colaborador_pc [100], f_estado_do_pc [100],f_cdia[2], f_cmes [2],f_cano [4];
+        int  f_numero_id,f_dia, f_mes ,f_ano,i,x,repeat,do_ok,valor;
+        char f_designacao [100], f_nome_colaborador_pc [100], f_estado_do_pc [100] ;
         float f_valor_Equip;
+        do_ok=0;
+        repeat=0;
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-        printf("\nIntroduza o Numero de Identificaï¿½ï¿½o ate 25 carateres:\n");
+        printf("\nIntroduza o Número de Identificação ate 25 carateres:\n");
+
+
         do
         {
+            repeat=0;
             x=0;
-            z=0;
             i=0;
             valor=0;
             do_ok=0;
             repeat=0;
             fflush(stdin);
-            gets(f_numero_id);
-            for (i=0; i<25;i++)
+            scanf("%d",&f_numero_id);
+            if (isdigit(f_numero_id)!=0 &&numero.n_pcs>1)
             {
-                if (f_numero_id[i]>=48 &&  f_numero_id[i]<=57)
+                for (i=0; i<100;i++)
                 {
-                }
-                else if (f_numero_id[i]=='\0' && repeat==1)
-                {
-                    break;
-                }
-                else if (f_numero_id[i]=='\0' && repeat==0)
-                {
-                    for (x=0; x<25;x++)
+                    if (f_numero_id!= novo_pc[i].numero_id)
                     {
-                        valor=strcmp(novo_pc[x].numero_id,f_numero_id);
-                        if (valor==0)
-                        {
-                            repeat=1;
-                            printf("\nNumero de identificacao ja atribuido,\nIntroduza um novo Nï¿½mero de Identificaï¿½ï¿½o:\n");
-                            break;
-                        }
-                        else if (valor!=0 && x!=numero.n_pcs)
-                        {
 
-                        }
-                        else if ((valor!=0 || numero.n_pcs==0) && x==numero.n_pcs && repeat==0)
-                        {
-                            do_ok=1;
-                            break;
-                        }
+                    }
+                    else if (i=numero.n_pcs)
+                    {
+                        do_ok=1;
+                        break;
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
-                else if (do_ok)
-                {
-                    break;
-                }
-                else
-                {
-                    repeat=1;
-                    printf("\nNumero de id incorreto,\nintroduza apenas carateres ddo tipo ('0' a '9')");
-                    printf("\nIntroduza um novo numero de id para o computador :\n");
-                    break;
-                }
-
+            }
+            else if ((f_numero_id)!=0 &&numero.n_pcs==0)
+            {
+                do_ok=1;
+                break;
+            }
+            else
+            {
 
             }
+
        } while (do_ok!=1);
+       do_ok=0;
+       repeat=0;
         strcpy(novo_pc[numero.n_pcs].numero_id,f_numero_id);
         printf("%s\n",novo_pc[numero.n_pcs].numero_id);
 
@@ -202,8 +193,8 @@ void adc_computador(t_pc novo_pc[],cont numero)
         printf("\nIntroduza uma designacao:\n");
         do
         {
+            repeat=0;
             x=0;
-            z=0;
             i=0;
             valor=0;
             do_ok=0;
@@ -243,15 +234,9 @@ void adc_computador(t_pc novo_pc[],cont numero)
         printf("\nIntroduza o nome do colaborador com o computador :\n");
         do
         {
-            x=0;
-            z=0;
-            i=0;
-            valor=0;
-            do_ok=0;
-            repeat=0;
             fflush(stdin);
             gets(f_nome_colaborador_pc);
-
+            repeat=0;
             for (i=0; i<100;i++)
             {
                 if ((f_nome_colaborador_pc[i]>=97 &&  f_nome_colaborador_pc[i]<=122) ||
@@ -281,6 +266,8 @@ void adc_computador(t_pc novo_pc[],cont numero)
 
             }
        } while (do_ok!=1);
+       do_ok=0;
+       repeat=0;
         strcpy(novo_pc[numero.n_pcs].nome_colaborador_pc,f_nome_colaborador_pc);
         printf("%s\n",novo_pc[numero.n_pcs].nome_colaborador_pc);
 
@@ -288,131 +275,30 @@ void adc_computador(t_pc novo_pc[],cont numero)
         printf("\nIntroduza uma data de atribuicao no formato -> ano,mes,dia\n");
         do
         {
-            x=0;
-            z=0;
-            i=0;
-            valor=0;
-            do_ok=0;
-            repeat=0;
-            fflush(stdin);
-            scanf("%s,%s,%s",&f_ano,
-                            &f_mes,
-                            &f_dia);
+             fflush(stdin);
+             scanf("%d,%d,%d",&f_ano,
+                              &f_mes,
+                              &f_dia);
+          if (((((f_mes==1||f_mes==3||f_mes==5||f_mes==7||f_mes==8||f_mes==10||f_mes==12)&& f_dia>32)||//anos nao bissextos
+                ((f_mes==4||f_mes==6||f_mes==9||f_mes==11)&& f_dia>31)||//anos nao bissextos
+                (f_mes==2&& f_dia>28))&&f_ano%4!=0)||//anos nao bissextos
+                ((((f_mes==1||f_mes==3||f_mes==5||f_mes==7||f_mes==8||f_mes==10||f_mes==12)&& f_dia>32)||//anos bissextos
+                ((f_mes==4||f_mes==6||f_mes==9||f_mes==11)&& f_dia>31)||//anos bissextos
+                (f_mes==2&& f_dia>29))&&(f_ano%4==0 ||//anos bissextos
+                (f_ano!=400||f_ano!=800||f_ano!=1200||f_ano!=1600||f_ano!=2000||f_ano!=2400||f_ano!=2800||f_ano!=3200||//anos bissextos
+                 f_ano!=3600||f_ano!=4000||f_ano!=4400||f_ano!=4800||f_ano!=5200||f_ano!=5600||f_ano!=6000||f_ano!=6400||//anos bissextos
+                 f_ano!=6800||f_ano!=7200||f_ano!=7600||f_ano!=8000||f_ano!=8400||f_ano!=8800||f_ano!=9200||f_ano!=9600||//anos bissextos
+                 f_ano!=1000))));//anos bissextos
+          {
 
-            for (i=0; i<100;i++)
-            {
-                if (f_cano[i]>=48 &&  f_cano[i]<=57)
-                {
-                }
-                else if (f_cano[i]=='\0' && f_cano==0)
-                {
-                    for (x=0; x<100;x++)
-                    {
-                        if (f_cmes[x]>=48 &&  f_cmes[x]<=57)
-                        {
-                        }
-                        else if (f_cmes[x]=='\0' && f_cmes==0)
-                        {
-                            for (z=0;z<100;z++)
-                            {
-                                if (f_cdia[z]>=48 &&  f_cdia[z]<=57)
-                                {
-                                }
-                                else if (f_cdia[z]=='\0' && f_cdia==0)
-                                {
-                                    if (((((f_mes==1||f_mes==3||f_mes==5||f_mes==7||f_mes==8||f_mes==10||f_mes==12)&& f_dia>=32)||//anos nao bissextos
-                                            ((f_mes==4||f_mes==6||f_mes==9||f_mes==11)&& f_dia>=31)||//anos nao bissextos
-                                            (f_mes==2&& f_dia>=29))&&f_ano%4!=0)||//anos nao bissextos
-
-                                            ((((f_mes==1||f_mes==3||f_mes==5||f_mes==7||f_mes==8||f_mes==10||f_mes==12)&& f_dia>=32)||//anos bissextos
-                                            ((f_mes==4||f_mes==6||f_mes==9||f_mes==11)&& f_dia>=31)||//anos bissextos
-                                            (f_mes==2&& f_dia>=30))&&(f_ano%4==0 ||//anos bissextos
-                                            (f_ano!=400||f_ano!=800||f_ano!=1200||f_ano!=1600||f_ano!=2000||f_ano!=2400||f_ano!=2800||f_ano!=3200||//anos bissextos
-                                            f_ano!=3600||f_ano!=4000||f_ano!=4400||f_ano!=4800||f_ano!=5200||f_ano!=5600||f_ano!=6000||f_ano!=6400||//anos bissextos
-                                            f_ano!=6800||f_ano!=7200||f_ano!=7600||f_ano!=8000||f_ano!=8400||f_ano!=8800||f_ano!=9200||f_ano!=9600||//anos bissextos
-                                            f_ano!=1000))))//anos bissextos
-                                    {
-                                        repeat=1;
-                                        printf("\nData Impropria,\nIntroduza uma nova data de atribuicao no formato -> ano,mes,dia\n");
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        do_ok=1;
-                                    }
-                                }
-                                else if ((f_cdia[z]=='\0' && repeat==1)
-                                {
-                                    break;
-                                }
-                                else
-                                {
-                                    repeat=1;
-                                    printf("\nData incorreta,\nintroduza apenas carateres do tipo ('0' a '1')");
-                                    printf("\nIntroduza uma nova Data:\n");
-                                    break;
-                                }
-                            }
-                        }
-                        else if (f_cmes[x]=='\0' && repeat==1)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            repeat=1;
-                            printf("\nData incorreta,\nintroduza apenas carateres do tipo ('0' a '1')");
-                            printf("\nIntroduza uma nova Data:\n");
-                            break;
-                        }
-                    }
-                }
-                else if (f_cano[i]=='\0' && repeat==1)
-                {
-                    break;
-                }
-                else
-                {
-                    repeat=1;
-                    printf("\nData incorreta,\nintroduza apenas carateres do tipo ('0' a '1')");
-                    printf("\nIntroduza uma nova Data:\n");
-                    break;
-                }
-            }
+           printf("\nData Impropria,\nIntroduza uma nova data de atribuicao no formato -> ano,mes,dia\n");
+          }
 
 
 
-  /*          if (((((f_mes==1||f_mes==3||f_mes==5||f_mes==7||f_mes==8||f_mes==10||f_mes==12)&& f_dia>=32)||//anos nao bissextos
-                    ((f_mes==4||f_mes==6||f_mes==9||f_mes==11)&& f_dia>=31)||//anos nao bissextos
-                    (f_mes==2&& f_dia>=29))&&f_ano%4!=0)||//anos nao bissextos
-
-                    ((((f_mes==1||f_mes==3||f_mes==5||f_mes==7||f_mes==8||f_mes==10||f_mes==12)&& f_dia>=32)||//anos bissextos
-                    ((f_mes==4||f_mes==6||f_mes==9||f_mes==11)&& f_dia>=31)||//anos bissextos
-                    (f_mes==2&& f_dia>=30))&&(f_ano%4==0 ||//anos bissextos
-                    (f_ano!=400||f_ano!=800||f_ano!=1200||f_ano!=1600||f_ano!=2000||f_ano!=2400||f_ano!=2800||f_ano!=3200||//anos bissextos
-                    f_ano!=3600||f_ano!=4000||f_ano!=4400||f_ano!=4800||f_ano!=5200||f_ano!=5600||f_ano!=6000||f_ano!=6400||//anos bissextos
-                    f_ano!=6800||f_ano!=7200||f_ano!=7600||f_ano!=8000||f_ano!=8400||f_ano!=8800||f_ano!=9200||f_ano!=9600||//anos bissextos
-                    f_ano!=1000))))//anos bissextos
-                {
-                    repeat=1;
-                    printf("\nData Impropria,\nIntroduza uma nova data de atribuicao no formato -> ano,mes,dia\n");
-                    break;
-                }
-                else
-                {
-                do_ok=1;
-                }
-*/
-
-
-
-
-
-        }while(do_ok!=1);
-
-        /*(((((f_mes==1||f_mes==3||f_mes==5||f_mes==7||f_mes==8||f_mes==10||f_mes==12)&& f_dia>31)||//anos nao bissextos
+        }while(((((f_mes==1||f_mes==3||f_mes==5||f_mes==7||f_mes==8||f_mes==10||f_mes==12)&& f_dia>31)||//anos nao bissextos
                 ((f_mes==4||f_mes==6||f_mes==9||f_mes==11)&& f_dia>30)||//anos nao bissextos
-                (f_mes==2 && f_dia>28))&&f_ano%4!=0 && f_mes>12)||//anos nao bissextos
+                (f_mes==2&& f_dia>28))&&f_ano%4!=0 && f_mes>12)||//anos nao bissextos
 
 
                 (((((f_mes==1||f_mes==3||f_mes==5||f_mes==7||f_mes==8||f_mes==10||f_mes==12)&& f_dia>31)||//anos bissextos
@@ -422,7 +308,7 @@ void adc_computador(t_pc novo_pc[],cont numero)
                  f_ano!=3600||f_ano!=4000||f_ano!=4400||f_ano!=4800||f_ano!=5200||f_ano!=5600||f_ano!=6000||f_ano!=6400||//anos bissextos
                  f_ano!=6800||f_ano!=7200||f_ano!=7600||f_ano!=8000||f_ano!=8400||f_ano!=8800||f_ano!=9200||f_ano!=9600||//anos bissextos
                  f_ano!=1000 )&& f_mes>12)));//anos bissextos
-*/
+
          novo_pc[numero.n_pcs].data_atribuicao.ano=f_ano;
          novo_pc[numero.n_pcs].data_atribuicao.mes=f_mes;
          novo_pc[numero.n_pcs].data_atribuicao.dia=f_dia;
@@ -433,47 +319,8 @@ void adc_computador(t_pc novo_pc[],cont numero)
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         printf("\nIntroduza o estado do computador:\n");
-
-        do
-        {
-            repeat=0;
-            x=0;
-            z=0;
-            i=0;
-            valor=0;
-            do_ok=0;
-            repeat=0;
-            fflush(stdin);
-            gets(f_estado_do_pc);
-            for (i=0; i<100;i++)
-            {
-                if ((f_estado_do_pc[i]>=97 &&  f_estado_do_pc[i]<=122) ||
-                    (f_estado_do_pc[i]>=65 &&  f_estado_do_pc[i]<=90) ||
-                    (f_estado_do_pc[i]==32))
-                {
-
-                }
-
-                else if (f_estado_do_pc[i]=='\0' && repeat==0)
-                {
-                    do_ok=1;
-                    break;
-                }
-                else if (f_estado_do_pc[i]=='\0' && repeat==1)
-                {
-                    break;
-                }
-                else
-                {
-                    repeat=1;
-                    printf("\nEstado do computador incorreto,\nintroduza apenas carateres do tipo ('a' a 'z'), ('A' a 'Z'), ('0' a '9')");
-                    printf("\nIntroduza um novo estado do computador:\n");
-                    break;
-                }
-            }
-
-
-        }while (do_ok!=1);
+        fflush(stdin);
+        scanf("%s",&f_estado_do_pc);
         strcpy(novo_pc[numero.n_pcs].estado_do_pc,f_estado_do_pc);
         printf("%s\n",novo_pc[numero.n_pcs].estado_do_pc);
 

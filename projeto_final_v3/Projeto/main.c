@@ -2,6 +2,7 @@
     #include <string.h>
     #include <stdlib.h>
     #include <time.h>
+    #include <ctype.h>
 
 
 
@@ -19,7 +20,7 @@
 
     typedef struct
     { // e struct designe para guardar a info sobre pcs
-    char numero_id[25];
+    int numero_id[25];
     char designacao [100] ;
     char nome_colaborador_pc [100];
     t_data data_atribuicao;
@@ -133,8 +134,8 @@ void funcao_menu (t_pc novo_pc[], cont numero)
 
 void adc_computador(t_pc novo_pc[],cont numero)
 {
-        int  f_dia, f_mes ,f_ano,i,x,repeat,do_ok,valor;
-        char f_numero_id[25],f_designacao [100], f_nome_colaborador_pc [100], f_estado_do_pc [100] ;
+        int  f_numero_id,f_dia, f_mes ,f_ano,i,x,repeat,do_ok,valor;
+        char f_designacao [100], f_nome_colaborador_pc [100], f_estado_do_pc [100] ;
         float f_valor_Equip;
         do_ok=0;
         repeat=0;
@@ -152,52 +153,37 @@ void adc_computador(t_pc novo_pc[],cont numero)
             do_ok=0;
             repeat=0;
             fflush(stdin);
-            gets(f_numero_id);
-            for (i=0; i<25;i++)
+            scanf("%d",&f_numero_id);
+            if (isdigit(f_numero_id)!=0 &&numero.n_pcs>1)
             {
-                if (f_numero_id[i]>=48 &&  f_numero_id[i]<=57)
+                printf("1");
+                for (i=0; i<100;i++)
                 {
-                }
-                else if (f_numero_id[i]=='\0' && repeat==1)
-                {
-                    break;
-                }
-                else if (f_numero_id[i]=='\0' && repeat==0)
-                {
-                    for (x=0; x<25;x++)
+                    if (f_numero_id!= novo_pc[i].numero_id)
                     {
-                        valor=strcmp(novo_pc[x].numero_id,f_numero_id);
-                        if (valor==0)
-                        {
-                            repeat=1;
-                            printf("\nNumero de identificacao ja atribuido,\nIntroduza um novo Número de Identificação:\n");
-                            break;
-                        }
-                        else if (valor!=0 && x!=numero.n_pcs)
-                        {
 
-                        }
-                        else if ((valor!=0 || numero.n_pcs==0) && x==numero.n_pcs && repeat==0)
-                        {
-                            do_ok=1;
-                            break;
-                        }
+                    }
+                    else if (i=numero.n_pcs)
+                    {
+                        do_ok=1;
+                        break;
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
-                else if (do_ok)//(f_numero_id[i]=='\0' && repeat==0 && numero.n_pcs==0)
-                {
-                    break;
-                }
-                else
-                {
-                    repeat=1;
-                    printf("\nNumero de id incorreto,\nintroduza apenas carateres ddo tipo ('0' a '9')");
-                    printf("\nIntroduza um novo numero de id para o computador :\n");
-                    break;
-                }
-
+            }
+            else if ((f_numero_id)!=0 &&numero.n_pcs==0)
+            {
+                do_ok=1;
+                break;
+            }
+            else
+            {
 
             }
+
        } while (do_ok!=1);
        do_ok=0;
        repeat=0;
