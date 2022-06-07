@@ -1,4 +1,4 @@
- #include <stdio.h>
+  #include <stdio.h>
     #include <string.h>
     #include <stdlib.h>
     #include <time.h>
@@ -133,8 +133,8 @@ void funcao_menu (t_pc novo_pc[], cont numero)
 
 void adc_computador(t_pc novo_pc[],cont numero)
 {
-        int  i,z,x,repeat,do_ok,valor,f_dia,f_mes,f_ano;
-        char f_numero_id[25],f_designacao [100], f_nome_colaborador_pc [100], f_estado_do_pc [100],f_cdia[2], f_cmes [2],f_cano [4];
+        int  i,z,x,repeat,do_ok,valor,f_dia=0,f_mes=0,f_ano=0;
+        char f_numero_id[25],f_designacao [100], f_nome_colaborador_pc [100], f_estado_do_pc [100],f_cdia[2], f_cmes [2],f_cano [4],str[100];
         float f_valor_Equip;
 
         ////////////////////////////////////////////////////////////////////////////////////////////
@@ -285,21 +285,33 @@ void adc_computador(t_pc novo_pc[],cont numero)
         printf("%s\n",novo_pc[numero.n_pcs].nome_colaborador_pc);
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-        printf("\nIntroduza uma data de atribuicao no formato -> ano,mes,dia\n");
+        printf("\nIntroduza uma data de atribuicao no formatos -> ano,mes,dia\n");
         do
         {
-          /*  x=0;
+            x=0;
             z=0;
             i=0;
             valor=0;
             do_ok=0;
             repeat=0;
             fflush(stdin);
-            scanf("%s,%s,%s",&f_ano,
+            do
+            {
+               fflush(stdin) ;
+            scanf("%[^0-9]d,%[^0-9]d,%[^0-9]d",&f_ano,&f_mes,&f_dia);
+            printf("%d %d %d",f_ano,f_mes,f_dia);
+
+            if (f_ano==0 || f_mes==0||f_dia==0)
+            {
+                printf("\nData Impropria,\nIntroduza uma nova data de atribuicao no formato -> ano,mes,dia\n");
+            }
+
+            } while (f_ano==0 || f_mes==0||f_dia==0);
+          /*  scanf("%s,%s,%s",&f_ano,
                             &f_mes,
                             &f_dia);
-
-            for (i=0; i<100;i++)
+*/
+       /*     for (i=0; i<100;i++)
             {
                 if (f_cano[i]>=48 &&  f_cano[i]<=57)
                 {
@@ -381,6 +393,7 @@ void adc_computador(t_pc novo_pc[],cont numero)
             }
 
 */
+
          if (((((f_mes==1||f_mes==3||f_mes==5||f_mes==7||f_mes==8||f_mes==10||f_mes==12)&& f_dia>=32)||//anos nao bissextos
                     ((f_mes==4||f_mes==6||f_mes==9||f_mes==11)&& f_dia>=31)||//anos nao bissextos
                     (f_mes==2&& f_dia>=29))&&f_ano%4!=0)||//anos nao bissextos
