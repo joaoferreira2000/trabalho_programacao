@@ -944,8 +944,3 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
         }while (do_ok!=1);
 
 }
-
-
-
-
-
