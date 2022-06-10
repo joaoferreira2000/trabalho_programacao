@@ -9,14 +9,14 @@
     void funcao_menu (novo_pc,numero);
     void adc_intrevencao(nova_intre,numero,novo_pc);
     void adc_registo(novo_pc,nova_intre,reg_intre,numero);
+    void informacaoes(novo_pc,nova_intre,reg_intre,numero);
+
+
 
     typedef struct
     {
     int dia, mes, ano;
     }t_data;
-
-
-
 
     typedef struct
     { // e struct designe para guardar a info sobre pcs
@@ -45,8 +45,8 @@
 
     typedef struct
     {
-    int n_pcs, n_soli_intre, n_regis_intre;
-    float valor_total;
+    int n_pcs, n_soli_intre, n_regis_intre, n_operacional, n_por_intrevencao, n_avariados;
+    float valor_total,custo_medio_intrevencoes, menor_valor;
     }cont;
 
 
@@ -61,10 +61,31 @@ int main ()
         numero.n_soli_intre=0;
         numero.n_regis_intre=0;
         numero.valor_total=0;
-        int opcao;
-
+        numero.n_avariados=0;
+        numero.n_operacional=0;
+        numero.n_por_intrevencao=0;
+        int opcao,x,y,i;
 
     do{
+        numero.n_por_intrevencao=0;
+        numero.n_avariados=0;
+        numero.n_operacional=0;
+        for (i=0; i<25;i++)
+        {
+            if((strcmp(novo_pc[i].estado_do_pc,"1")==0) && i<=numero.n_pcs)
+            {
+                numero.n_operacional=numero.n_operacional+1;
+            }
+            if((strcmp(novo_pc[i].estado_do_pc,"2")==0) && i<=numero.n_pcs)
+            {
+                numero.n_por_intrevencao=numero.n_por_intrevencao+1;
+            }
+            if((strcmp(novo_pc[i].estado_do_pc,"3")==0) && i<=numero.n_pcs)
+            {
+                numero.n_avariados=numero.n_avariados+1;
+            }
+        }
+
         funcao_menu (novo_pc,numero);
         fflush(stdin);
         scanf("%d",&opcao);
@@ -86,6 +107,7 @@ int main ()
 
         case 3 :
         adc_registo(novo_pc,nova_intre,reg_intre,numero);
+        numero.custo_medio_intrevencoes=numero.custo_medio_intrevencoes+reg_intre[numero.n_regis_intre].custo_intrevencao;
         numero.n_regis_intre=numero.n_regis_intre+1;
         break;
 
@@ -97,6 +119,7 @@ int main ()
 
 
         case 5 :
+        informacaoes(novo_pc,nova_intre,reg_intre,numero);
         break;
 
 
@@ -137,7 +160,6 @@ void funcao_menu (t_pc novo_pc[], cont numero)
 
         printf("Selecione a Opcao:");
 }
-
 
 void adc_computador(t_pc novo_pc[],cont numero)
 {
@@ -392,13 +414,12 @@ void adc_computador(t_pc novo_pc[],cont numero)
             valor=0;
             do_ok=0;
             repeat=0;
+            printf("\nEscolha um numero para o estado do computador:\n1 -> operacional\n2 -> por intrevencao\n3 -> avariado\n");
             fflush(stdin);
             gets(f_estado_do_pc);
             for (i=0; i<100;i++)
             {
-                if ((f_estado_do_pc[i]>=97 &&  f_estado_do_pc[i]<=122) ||
-                    (f_estado_do_pc[i]>=65 &&  f_estado_do_pc[i]<=90) ||
-                    (f_estado_do_pc[i]==32))
+                if (f_estado_do_pc[i]>=49 &&  f_estado_do_pc[i]<=51)
                 {
 
                 }
@@ -415,7 +436,7 @@ void adc_computador(t_pc novo_pc[],cont numero)
                 else
                 {
                     repeat=1;
-                    printf("\nEstado do computador incorreto,\nintroduza apenas carateres do tipo ('a' a 'z'), ('A' a 'Z')");
+                    printf("\nEstado do computador incorreto,\nintroduza apenas numeros  de ('1' a '3')");
                     printf("\nIntroduza um novo estado do computador:\n");
                     break;
                 }
@@ -450,7 +471,6 @@ void adc_computador(t_pc novo_pc[],cont numero)
                 do_ok=1;
                 break;
                 }
-                printf("%d\n",x);
             } while( x!= 110 && x!=121);
             if (x == 121)
             {
@@ -459,6 +479,7 @@ void adc_computador(t_pc novo_pc[],cont numero)
             }
             else
             {
+                printf("intruduza um novo valor do computador:\n");
                 do_ok=0;
             }
 
@@ -811,7 +832,46 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
     }while (do_ok!=1&&i>0);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-   printf("\nIntroduza uma data de atribuicao no formatos -> \nano ->\nmes ->\ndia ->\n");
+
+    printf("\nIntroduza uma descricao da intrevencao:\n");
+        do
+        {
+            x=0;
+            z=0;
+            i=0;
+            valor=0;
+            do_ok=0;
+            repeat=0;
+            fflush(stdin);
+            gets(f_descricao_intrevencao);
+            for (i=0; i<100;i++)
+            {
+                if ((f_descricao_intrevencao[i]>=48 &&  f_descricao_intrevencao[i]<=57)||
+                    (f_descricao_intrevencao[i]>=97 &&  f_descricao_intrevencao[i]<=122) ||
+                    (f_descricao_intrevencao[i]>=65 &&  f_descricao_intrevencao[i]<=90) ||
+                    (f_descricao_intrevencao[i]==32))
+                {
+                }
+                else if (f_descricao_intrevencao[i]=='\0' && repeat==1)
+                {
+                    break;
+                }
+                else if (f_descricao_intrevencao[i]=='\0' && repeat==0)
+                {
+                    do_ok=1;
+                    break;
+                }else
+                {
+                    repeat=1;
+                    printf("\descricao da intrevencao impropria,\nintroduza apenas carateres do tipo ('a' a 'z'),('A' a 'Z'),('0' a '9')");
+                    printf("\nIntroduza uma nova descricao da intrevencao para o computador :\n");
+                    break;
+                }
+            }
+        }while (do_ok!=1);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        printf("\nIntroduza uma data de atribuicao no formatos -> \nano ->\nmes ->\ndia ->\n");
         do
         {
             f_ano=0;
@@ -929,7 +989,6 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
                 do_ok=1;
                 break;
                 }
-                printf("%d\n",x);
             } while( x!= 110 && x!=121);
             if (x == 121)
             {
@@ -940,7 +999,61 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
             {
                 do_ok=0;
             }
-
         }while (do_ok!=1);
 
+        strcpy(reg_intre[numero.n_regis_intre].descricao_intrevencao,f_descricao_intrevencao);
+
+        reg_intre[numero.n_regis_intre].data_intrevencao.ano=f_ano;
+        reg_intre[numero.n_regis_intre].data_intrevencao.mes=f_mes;
+        reg_intre[numero.n_regis_intre].data_intrevencao.dia=f_dia;
+
+        reg_intre[numero.n_regis_intre].custo_intrevencao=f_custo_intrevencao;
+
+        if (numero.n_regis_intre==0)
+        {
+            numero.menor_valor=f_custo_intrevencao;
+        }
+
+        if ((numero.n_regis_intre>0) && (numero.menor_valor>f_custo_intrevencao))
+        {
+            numero.menor_valor=f_custo_intrevencao;
+        }
+
+
+        printf("%f",numero.menor_valor);
+}
+
+void informacaoes(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_intre[],cont numero)
+{
+    int opcao,x;
+    printf("%f",numero.menor_valor);
+    printf("\n1 -> Quantidade de computadores em cada estado\n2 -> Custo medio por cada intervenção efetuada nos computadores\n3 -> Intervencao/oes com o menor custo\n");
+    printf("4 -> Percentagem de intervenções efetuadas em menos de 10 dias\n5 -> Quantidade de computadores que ja avariaram\n\nSelecione uma opcao:\n");
+    fflush(stdin);
+    scanf("%d",&opcao);
+
+    switch (opcao)
+    {
+        case 1 :
+            printf("computadores operacionais -> %d\ncomputadores a espera de intrevencao -> %d\ncomputadores avariados -> %d"
+                   ,numero.n_operacional,numero.n_por_intrevencao,numero.n_avariados);
+        return;
+        break;
+
+        case 2 :
+            printf("\nO custo medio de %d intrevencoes foi de :%f",numero.n_regis_intre,numero.custo_medio_intrevencoes/numero.n_regis_intre);
+        break;
+
+        case 3 :
+
+        printf("\nO custo mais baixo de %d intrevencoes foi de : %f", numero.n_regis_intre, numero.menor_valor);
+        break;
+
+        case 4 :
+        break;
+
+        case 5 :
+        break;
+
+    }
 }
