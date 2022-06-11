@@ -87,11 +87,24 @@ int main ()
 
 
         case 2 :
+        if (numero.n_pcs==0)
+        {
+            printf("\npor favor adicione um computador primeiro");
+        }
+        else if (numero.n_pcs>0)
+        {
         adc_intrevencao(nova_intre,numero,novo_pc);
         numero.n_soli_intre=numero.n_soli_intre+1;
+        }
         break;
 
         case 3 :
+        if (numero.n_soli_intre==0)
+        {
+            printf("\npor favor adicione uma solicitacao de intrevencao primeiro");
+        }
+        else if (numero.n_soli_intre>0)
+        {
         adc_registo(novo_pc,nova_intre,reg_intre,numero);
         numero.custo_medio_intrevencoes=numero.custo_medio_intrevencoes+reg_intre[numero.n_regis_intre].custo_intrevencao;
         if (numero.n_regis_intre==0)
@@ -103,6 +116,7 @@ int main ()
             numero.menor_valor=reg_intre[numero.n_regis_intre].custo_intrevencao;
         }
         numero.n_regis_intre=numero.n_regis_intre+1;
+        }
         break;
 
 
@@ -113,6 +127,12 @@ int main ()
 
 
         case 5 :
+        if (numero.n_pcs==0)
+        {
+            printf("\npor favor adicione um computador primeiro");
+        }
+        else if (numero.n_pcs>0)
+        {
         for (i=0; i<25;i++)
         {
             if((strcmp(novo_pc[i].estado_do_pc,"1")==0) && i<=numero.n_pcs)
@@ -129,9 +149,8 @@ int main ()
             }
         }
         informacaoes(novo_pc,nova_intre,reg_intre,numero);
+        }
         break;
-
-
 
         case 6 :
         break;
@@ -1017,7 +1036,6 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
         reg_intre[numero.n_regis_intre].data_intrevencao.dia=f_dia;
 
         reg_intre[numero.n_regis_intre].custo_intrevencao=f_custo_intrevencao;
-
 }
 
 void informacaoes(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_intre[],cont numero)
@@ -1054,4 +1072,54 @@ void informacaoes(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_i
         break;
 
     }
+}
+
+
+void guardar(t_pc novo_pc[], t_solicitacao nova_intre[], t_intrevencao reg_intre[], cont numero)
+{
+    char nomeficheiro[100];
+    printf("Insira o nome do ficheiro: ");
+    fflush(stdin);
+    gets(nomeficheiro);
+    FILE *fptr;
+    fptr=fopen(nomeficheiro, "wb");
+    fwrite(computadores, sizeof(t_pc), 25, fptr);
+    fwrite(intervencoes, sizeof(t_solicitacao), 100, fptr);
+    fwrite(registar, sizeof(t_intrevencao), 100, fptr);
+    fwrite(&menu, sizeof(t_menu), 1, fptr);
+    fwrite(&estado, sizeof(t_estado), 1, fptr);
+    fclose(fptr);
+
+
+
+
+
+
+
+
+
+
+
+
+    char nome[100];
+    printf("Insira o nome do ficheiro: ");
+    scanf("%s", nome);
+    FILE *fptr;
+    fptr=fopen(nome, "wb");
+    fwrite(computadores, sizeof(t_comp), 25, fptr);
+    fwrite(intervencoes, sizeof(t_intervencao), 100, fptr);
+    fwrite(registar, sizeof(t_registar), 100, fptr);
+    fwrite(&menu, sizeof(t_menu), 1, fptr);
+    fwrite(&estado, sizeof(t_estado), 1, fptr);
+    fclose(fptr);
+
+
+
+
+
+
+
+
+
+
 }
