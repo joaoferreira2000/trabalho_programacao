@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1655139130 source:c:\users\joão\documents\github\trabalho_programacao\projeto_v15\projeto_v15\main.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<time.h>
+

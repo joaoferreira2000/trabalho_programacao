@@ -1,17 +1,17 @@
-     #include <stdio.h>
+    #include <stdio.h>
     #include <string.h>
     #include <stdlib.h>
     #include <time.h>
 
 
 
-    void adc_computador(novo_pc,numero);
     void funcao_menu (novo_pc,numero);
+    void adc_computador(novo_pc,numero);
     void adc_intrevencao(nova_intre,numero,novo_pc);
     void adc_registo(novo_pc,nova_intre,reg_intre,numero,fptr_log);
+    void adc_listar(novo_pc, nova_intre, reg_intre, numero);
     void informacaoes(novo_pc,nova_intre,reg_intre,numero);
     void guardar(novo_pc, nova_intre, reg_intre, numero);
-    void adc_listar(novo_pc, nova_intre, reg_intre, numero);
 
 
     typedef struct
@@ -35,11 +35,12 @@
     char n_id_computador[25];
     t_data data_intrevencao;
     char designacao_problema [100];
-    int numero_pc_pelo_id,resolvido;
+    int numero_vetor1,resolvido;
     }t_solicitacao;
 
     typedef struct
     { // e struct designe para guardar a info sobre intrevencoes registadas
+    char codigo_intrevencao[25] ;
     char descricao_intrevencao[25];
     char numero_id[25];
     t_data data_intrevencao;
@@ -76,8 +77,6 @@ int main ()
         {
         printf("Erro na abertura.");
         }
-
-
         do
         {
             do
@@ -661,7 +660,7 @@ void adc_intrevencao(t_solicitacao nova_intre [],cont numero,t_pc novo_pc[])
                 }
                 else if (f_n_id_computador[i]=='\0' && repeat==0 && f_n_id_computador[0]!='\0')
                 {
-                    for (x=0; x<24;x++)
+                    for (x=0; x<25;x++)
                     {
                         valor=strcmp(novo_pc[x].numero_id,f_n_id_computador);
                         if (valor!=0 && x!=numero.n_pcs)
@@ -897,7 +896,7 @@ void adc_intrevencao(t_solicitacao nova_intre [],cont numero,t_pc novo_pc[])
 
          strcpy(nova_intre[numero.n_soli_intre].codigo_intrevencao,f_codigo_intrevencao);
 
-         nova_intre[numero.n_soli_intre].numero_pc_pelo_id=numero_id_pc;
+         nova_intre[numero.n_soli_intre].numero_vetor1=numero_id_pc;
 
          nova_intre[numero.n_soli_intre].resolvido=0;
 
@@ -912,7 +911,7 @@ void adc_intrevencao(t_solicitacao nova_intre [],cont numero,t_pc novo_pc[])
 
 void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_intre[],cont numero, FILE *fptr_log)
 {
-    int f_dia,f_mes,f_ano,do_ok,i,x,z,y,valor,repeat,contador,numero_intrevencao, x_intrevencao;
+    int f_dia,f_mes,f_ano,do_ok,i,x,z,y,valor,repeat,contador,numero_intrevencao, vetor_intrevencao;
     char f_descricao_intrevencao [100],f_solicitacao_intrevencao [25], ask;
     float f_custo_intrevencao;
     ////////////////////////////////////////////////////////////////////
@@ -922,7 +921,7 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
         x=0;
         z=0;
         y=0;
-        x_intrevencao=0;
+        vetor_intrevencao=0;
         i=0;
         valor=0;
         do_ok=0;
@@ -944,7 +943,7 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
             {
                 for (x=0; x<100;x++)
                 {
-                    x_intrevencao=x;
+                    vetor_intrevencao=x;
                     valor=strcmp(nova_intre[x].codigo_intrevencao,f_solicitacao_intrevencao);
                     if (valor!=0 && x!=numero.n_soli_intre)
                     {
@@ -953,7 +952,7 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
                     {
                         for (y=0;y<100;y++)
                         {
-                            if (x==nova_intre[y].numero_pc_pelo_id && y<=numero.n_soli_intre-1 && nova_intre[y].resolvido==1)
+                            if (y<=numero.n_soli_intre-1 && nova_intre[y].resolvido==1)
                             {
                                 numero_intrevencao=y;
                                 contador=contador+1;
@@ -1151,20 +1150,20 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
                 }
                 else if (contador >0)
                 {
-                    if (f_custo_intrevencao>novo_pc[nova_intre[numero_intrevencao].numero_pc_pelo_id].valor_Equip)
+                    if (f_custo_intrevencao>novo_pc[nova_intre[numero_intrevencao].numero_vetor1].valor_Equip)
                     {
                         do_ok=1;
                         do
                         {
                         ask=0;
-                        printf("\no arranjo nao se justifica,\npretende passar o seu computador para avariado??");
-                        printf("\n'y' -> yes , 'n' -> nao??");
+                        printf("\no arranjo nao se justifica,\npretende passar o seu computador para avariado?");
+                        printf("\n'y' -> yes , 'n' -> nao\n");
                         fflush(stdin);
                         scanf("%c", &ask);
 
                             if(ask==121)
                             {
-                                strcpy(novo_pc[nova_intre[numero_intrevencao].numero_pc_pelo_id].estado_do_pc,"3");
+                                strcpy(novo_pc[nova_intre[numero_intrevencao].numero_vetor1].estado_do_pc,"3");
                             }
                         }while (ask!=121 && ask!=110);
                     }
@@ -1176,10 +1175,9 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
             }
         }while (do_ok!=1);
 
-   //     strcpy(reg_intre[numero.n_regis_intre].numero_id,nova_intre[y].numero_pc_pelo_id);
         strcpy(reg_intre[numero.n_regis_intre].descricao_intrevencao,f_descricao_intrevencao);
 
-        nova_intre[x_intrevencao].resolvido=1;
+        nova_intre[vetor_intrevencao].resolvido=1;
 
         reg_intre[numero.n_regis_intre].data_intrevencao.ano=f_ano;
         reg_intre[numero.n_regis_intre].data_intrevencao.mes=f_mes;
@@ -1187,20 +1185,24 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
 
         reg_intre[numero.n_regis_intre].custo_intrevencao=f_custo_intrevencao;
 
+        strcpy(reg_intre[numero.n_regis_intre].numero_id, novo_pc[nova_intre[vetor_intrevencao].numero_vetor1].numero_id);
+
+        strcpy(reg_intre[numero.n_regis_intre].codigo_intrevencao,f_solicitacao_intrevencao);
+
         fprintf(fptr_log, "\tDados da Intervencao com o codigo %s\n", f_solicitacao_intrevencao);
-        fprintf(fptr_log, "Nome do Colaborador: %s", novo_pc[nova_intre[x_intrevencao].numero_pc_pelo_id].nome_colaborador_pc );
-        fprintf(fptr_log, "Estado do Computador: %s", novo_pc[nova_intre[x_intrevencao].numero_pc_pelo_id].estado_do_pc );
+        fprintf(fptr_log, "Nome do Colaborador: %s", novo_pc[nova_intre[vetor_intrevencao].numero_vetor1].nome_colaborador_pc );
+        fprintf(fptr_log, "Estado do Computador: %s", novo_pc[nova_intre[vetor_intrevencao].numero_vetor1].estado_do_pc );
         fprintf(fptr_log, "Data da intervencao: %d-%d-%d\n", f_ano, f_mes, f_dia);
         fprintf(fptr_log, "Descricao da intervencao: %s\n", f_descricao_intrevencao);
         fprintf(fptr_log, "Custo da intervencao: %f\n", f_custo_intrevencao);
 
-
 }
 
 void adc_listar(t_pc novo_pc[],t_solicitacao nova_intre[],t_intrevencao reg_intre[],cont numero)
-{/*
-    int do_ok,i,x,z,y;
+{
+    int do_ok,i,x,z,y,repeat,valor,n1,n2,n_id;
     char opcao;
+    char f_n_id_computador[100],f_solicitacao_intrevencao[100];
 
     printf("\n1->  Dados completos de todos os computadores introduzidos, incluindo as quantidades de intervencoes solicitadas e efetuadas para cada computador.");
     printf("\n2->  Custo medio de computadores\n3-> Intervencao(oes) com menor  custo.\n4->  Dados das intervenções solicitadas num determinado computador (identificado pelo utilizador).");
@@ -1214,75 +1216,200 @@ void adc_listar(t_pc novo_pc[],t_solicitacao nova_intre[],t_intrevencao reg_intr
 
     switch(opcao)
     {
-        case 1:
+    case 1:
+        n1=0;
+        x=0;
+        i=0;
+        y=0;
+        n2=0;
         for(x= 0; x<=25;x++)
         {
-            printf("Computador n:%d",numero.n_pcs);
-            printf("\nNumero_id:%s",novo_pc[x].numero_id);
-            printf("\nDesignacao:%s",novo_pc[x].designacao);
-            printf("\nData:%d,%d,%d",novo_pc[x].data_atribuicao.ano,novo_pc[x].data_atribuicao.mes,novo_pc[x].data_atribuicao.dia);
-            printf("\nEstado do pc:%s",novo_pc[x].estado_do_pc);
-            printf("\nValor a pagar:%f",novo_pc[x].valor_Equip);
-            printf("\n Quantidade de intervencoes solicitadas:%s",nova_intre[x].n_id_computador);
-            printf("\n Quantidade de intervencoes efetuadas:%s\n",nova_intre[x].codigo_intrevencao);
+            if (x<=numero.n_pcs-1)
+            {
+                for (i=0;i<100;i++)
+                {
+                    printf("\n%s\n",nova_intre[i].n_id_computador);
+                    if ((strcmp(novo_pc[x].numero_id,nova_intre[i].n_id_computador))==0)
+                    {
+                        n1=n1+1;
+                    }
+                }
+                for (y=0;y<100;y++)
+                {
+                    if ((strcmp(novo_pc[x].numero_id,reg_intre[y].numero_id))==0)
+                    {
+                        n2=n2+1;
+                    }
+                }
+                printf("\nComputador n:%d",x+1);
+                printf("\nNumero_id:%s",novo_pc[x].numero_id);
+                printf("\nDesignacao:%s",novo_pc[x].designacao);
+                printf("\nData: %d, %d, %d",novo_pc[x].data_atribuicao.ano,novo_pc[x].data_atribuicao.mes,novo_pc[x].data_atribuicao.dia);
+                if((strcmp(novo_pc[x].estado_do_pc,"1")==0))
+                    {
+                     printf("Estado do pc: operacional\n");
+                    }
+                    if((strcmp(novo_pc[x].estado_do_pc,"2")==0))
+                    {
+                     printf("Estado do pc: por intrevencao\n");
+                    }
+                    if((strcmp(novo_pc[x].estado_do_pc,"3")==0))
+                    {
+                     printf("Estado do pc: avariado\n");
+                    }
+                printf("\nValor a pagar:%f",novo_pc[x].valor_Equip);
+                printf("\nQuantidade de intervencoes solicitadas:%d",n1);
+                printf("\nQuantidade de intervencoes efetuadas:%d\n\n\n",n2);
+            }
         }
         break;
 
         case 2:
-        for(x= 0; x<=25;x++)
+        n1=0;
+        x=0;
+        i=0;
+        y=0;
+        n2=0;
+        for(x= 0; x<=100;x++)
         {
-            printf("Intervencoes solicitadas n:%d",numero.n_regis_intre);
-            printf("\nnumero de identificacao do computador:%s",nova_intre[x].n_id_computador);
-            printf("\nData:%d,%d,%d",nova_intre[x].data_intrevencao.ano,nova_intre[x].data_intrevencao.mes,nova_intre[x].data_intrevencao.dia);
-            printf("\nBreve descricao do problema:%s",nova_intre[x].designacao_problema);
+            if (x<=numero.n_soli_intre-1)
+            {
+                printf("\nIntervencoes solicitadas n:%d",x+1);
+                printf("\nnumero de identificacao do computador:%s",nova_intre[x].n_id_computador);
+                printf("\nData: %d, %d, %d",nova_intre[x].data_intrevencao.ano,nova_intre[x].data_intrevencao.mes,nova_intre[x].data_intrevencao.dia);
+                printf("\nBreve descricao do problema:%s\n",nova_intre[x].designacao_problema);
+            }
         }
         break;
 
         case 3:
-        for(x= 0; x<=25;x++)
+        n1=0;
+        x=0;
+        i=0;
+        y=0;
+        n2=0;
+        for(x= 0; x<=100;x++)
         {
-            printf("Intervencoes efetuadas n:%d",x);
-            printf("\ndescricao da intervencao:%s",reg_intre[x].descricao_intrevencao);
-            printf("\nData:%d,%d,%d",reg_intre[x].data_intrevencao.ano,reg_intre[x].data_intrevencao.mes,reg_intre[x].data_intrevencao.dia);
-            printf("\nCusto da intrevencao:%f",reg_intre[x].custo_intrevencao);
+            if (x<=numero.n_soli_intre-1)
+            {
+                printf("\nIntervencoes efetuadas n:%d",x+1);
+                printf("\ndescricao da intervencao:%s",reg_intre[x].descricao_intrevencao);
+                printf("\nData: %d, %d, %d",reg_intre[x].data_intrevencao.ano,reg_intre[x].data_intrevencao.mes,reg_intre[x].data_intrevencao.dia);
+                printf("\nCusto da intrevencao:%.2f\n",reg_intre[x].custo_intrevencao);
+            }
         }
         break;
 
         case 4:
-
+            do
+            {
             i=0;
+            x=0;
+            y=0;
+            do_ok=0;
+            valor=0;
+            repeat=0;
+            printf("\nIntroduza o Id n:");
+            fflush(stdin);
+            gets(f_n_id_computador);
+                for (i=0; i<100;i++)
+                {
+                    if (f_n_id_computador[i]>=48 &&  f_n_id_computador[i]<=57)
+                    {
+                    }
+                    else if (f_n_id_computador[i]=='\0' && repeat==1) // invalida
+                    {
+                        break;
+                    }
+                    else if (f_n_id_computador[i]=='\0' && repeat==0 && f_n_id_computador[0]!='\0')
+                    {
+                        for (x=0; x<25;x++)
+                        {
+                            valor=strcmp(novo_pc[x].numero_id,f_n_id_computador); // se as stings tiverem o mesmo valor são iguais
+                            if (valor!=0 && x!=numero.n_pcs )
+                            {
+                            }
+                            else if (valor==0 )
+                            {
+                                n_id=x;
+                                do_ok=1;
+                                break;
+                            }
+                            else if (valor!=0  && x==numero.n_pcs )
+                            {
+                                printf("\nNumero de id, nao existe\nintroduza um numero de id de existente :\n");
+                                repeat=1;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        repeat=1;
+                        printf("\nnumero de id improprio,\nintroduza apenas carateres do tipo ('0' a '9')");
+                        printf("\nIntroduza um novo numero de id:\n");
+                        break;
+                    }
+                }
+            } while (do_ok!=1);
+
+            printf("\nPara o id n:%s\n",f_n_id_computador);
+            for(y= 0; y<=100;y++)
+            {
+                if (strcmp(novo_pc[n_id].numero_id,nova_intre[y].n_id_computador)==0)
+                {
+                    printf("\n\nCodigo de intrevencao n:%s",nova_intre[y].codigo_intrevencao);
+                    printf("\nData:%d,%d,%d",nova_intre[y].data_intrevencao.ano,nova_intre[y].data_intrevencao.mes,nova_intre[y].data_intrevencao.dia);
+                    printf("\nBreve descricao do problema:%s",nova_intre[y].designacao_problema);
+                }
+
+            }
+            break;
+
+        case 5:
+            printf("\nIntroduza o numero de solicitacao de intrevencao do computador:\n");
+            do
+            {
+            x=0;
+            z=0;
+            y=0;
+            i=0;
+            n1=0;
+            n2=0;
             valor=0;
             do_ok=0;
             repeat=0;
             fflush(stdin);
-            gets(f_n_id_computador);
+            gets(f_solicitacao_intrevencao);
             for (i=0; i<100;i++)
             {
-                if (f_n_id_computador[i]>=48 &&  f_n_id_computador[i]<=57)
+                if (f_solicitacao_intrevencao[i]>=48 &&  f_solicitacao_intrevencao[i]<=57)
                 {
                 }
-                else if (f_n_id_computador[i]=='\0' && repeat==1) // invalida
+                else if (f_solicitacao_intrevencao[i]=='\0' && repeat==1)
                 {
                     break;
                 }
-                else if (f_n_id_computador[i]=='\0' && repeat==0 && f_n_id_computador[0]!='\0')
+                else if (f_solicitacao_intrevencao[i]=='\0' && repeat==0 && f_solicitacao_intrevencao[0]!='\0')
                 {
-                    for (x=0; x<24;x++)
+                    for (x=0; x<100;x++)
                     {
-                        valor=strcmp(novo_pc[x].numero_id,f_n_id_computador); // se as stings tiverem o mesmo valor são iguais
-                        if (valor!=0 && x!=numero.n_pcs && x!= ID)
+                        valor=strcmp(nova_intre[x].codigo_intrevencao,f_solicitacao_intrevencao);
+                        if (valor!=0 && x!=numero.n_soli_intre)
                         {
                         }
                         else if (valor==0 )
                         {
+                            n1=x;
                             do_ok=1;
-                            break;
+                        break;
                         }
-                        else if (valor!=0  && x==numero.n_pcs && x == ID)
+                        else if (valor!=0  && x==numero.n_soli_intre)
                         {
-                            printf("\nNumero de id, nao existe\nintroduza um numero de id de existente :\n");
-                            repeat=1;
-                            break;
+                        printf("\nNumero de solicitacao de intrevencao, nao existe\nintroduza um solicitacao de intrevencao de existente :\n");
+                        repeat=1;
+                        break;
                         }
                     }
                     break;
@@ -1292,26 +1419,40 @@ void adc_listar(t_pc novo_pc[],t_solicitacao nova_intre[],t_intrevencao reg_intr
                     repeat=1;
                     printf("\nnumero de id improprio,\nintroduza apenas carateres do tipo ('0' a '9')");
                     printf("\nIntroduza um novo numero de id:\n");
-
                 }
             }
+            }while (do_ok!=1&&i>0);
 
-            for(x= 0; x<=25;x++)
+            printf("\nPara o codigo de intrevencao n:%s\n",f_solicitacao_intrevencao);
+            for(y= 0; y<=25;y++)
             {
-                printf("Introduza o Id n:");
-                printf("\nIntervencoes solicitadas n:%s",x);
-                printf("\nnumero de identificacao do computador:%s",nova_intre[x].n_id_computador);
-                printf("\nData:%d,%d,%d",nova_intre[x].data_intrevencao.ano,nova_intre[x].data_intrevencao.mes,nova_intre[x].data_intrevencao.dia);
-                printf("\nBreve descricao do problema:%s",nova_intre[x].designacao_problema);
-            break;
+                if ((strcmp(nova_intre[n1].n_id_computador, novo_pc[y].numero_id))==0)
+                {
+                    printf("\nNumero_id:%s",novo_pc[y].numero_id);
+                    printf("\nDesignacao:%s",novo_pc[y].designacao);
+                    printf("\nData: %d, %d, %d",novo_pc[y].data_atribuicao.ano,novo_pc[x].data_atribuicao.mes,novo_pc[x].data_atribuicao.dia);
+                    printf("\nValor a pagar:%.2f\n",novo_pc[y].valor_Equip);
+                    if((strcmp(novo_pc[y].estado_do_pc,"1")==0))
+                    {
+                     printf("Estado do pc: operacional\n");
+                    }
+                    if((strcmp(novo_pc[y].estado_do_pc,"2")==0))
+                    {
+                     printf("Estado do pc: por intrevencao\n");
+                    }
+                    if((strcmp(novo_pc[y].estado_do_pc,"3")==0))
+                    {
+                     printf("Estado do pc: avariado\n");
+                    }
+                }
             }
-*/
+            break;
     }
-
+}
 
 void informacaoes(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_intre[],cont numero)
 {
-    int opcao,x;
+    int opcao,x,y,z,i,f_dia,f_mes,f_ano,do_ok,repeat,percentagem;
     printf("\n1 -> Quantidade de computadores em cada estado\n2 -> Custo medio por cada intervenção efetuada nos computadores\n3 -> Intervencao/oes com o menor custo\n");
     printf("4 -> Percentagem de intervenções efetuadas em menos de 10 dias\n5 -> Quantidade de computadores que ja avariaram\n\nSelecione uma opcao:\n");
     fflush(stdin);
@@ -1335,10 +1476,156 @@ void informacaoes(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_i
         break;
 
         case 4 :
+            printf("\nIntroduza uma data de atribuicao no formatos : \nano ->\nmes ->\ndia ->\n");
+        do
+        {
+            f_ano=0;
+            f_mes=0;
+            f_dia=0;
+            x=0;
+            z=0;
+            i=0;
+            do_ok=0;
+            repeat=0;
+            fflush(stdin);
+
+            printf("por favor introduzir o ano -> ");
+            while(scanf("%d",&f_ano) != 1)
+            {
+                printf("por favor utilize apenas digitos para o ano: ");
+                while(getchar() != '\n');
+            }
+
+            fflush(stdin);
+            printf("por favor introduzir o mes -> ");
+            while(scanf("%d",&f_mes) != 1)
+            {
+                printf("por favor utilize apenas digitos para o mes: ");
+                while(getchar() != '\n');
+            }
+
+            fflush(stdin);
+            printf("por favor introduzir o dia -> ");
+            while(scanf("%d",&f_dia) != 1)
+            {
+                printf("por favor utilize apenas digitos para o dia: ");
+                while(getchar() != '\n');
+            }
+
+
+
+         if ((((((f_mes==1||f_mes==3||f_mes==5||f_mes==7||f_mes==8||f_mes==10||f_mes==12)&& f_dia>=32 )||//anos nao bissextos
+                    ((f_mes==4||f_mes==6||f_mes==9||f_mes==11)&& f_dia>=31)||//anos nao bissextos
+                    (f_mes==2&& f_dia>=29))&&f_ano%4!=0)||//anos nao bissextos
+
+                    ((((f_mes==1||f_mes==3||f_mes==5||f_mes==7||f_mes==8||f_mes==10||f_mes==12)&& f_dia>=32)||//anos bissextos
+                    ((f_mes==4||f_mes==6||f_mes==9||f_mes==11)&& f_dia>=31)||//anos bissextos
+                    (f_mes==2&& f_dia>=30))&&(f_ano%4==0 ||//anos bissextos
+                    (f_ano!=400||f_ano!=800||f_ano!=1200||f_ano!=1600||f_ano!=2000||f_ano!=2400||f_ano!=2800||f_ano!=3200||//anos bissextos
+                    f_ano!=3600||f_ano!=4000||f_ano!=4400||f_ano!=4800||f_ano!=5200||f_ano!=5600||f_ano!=6000||f_ano!=6400||//anos bissextos
+                    f_ano!=6800||f_ano!=7200||f_ano!=7600||f_ano!=8000||f_ano!=8400||f_ano!=8800||f_ano!=9200||f_ano!=9600||//anos bissextos
+                    f_ano!=1000)))) || f_mes>=13)//anos bissextos
+                {
+                    repeat=1;
+                    printf("\nData Impropria,\nIntroduza uma nova data de atribuicao no formato -> ano,mes,dia\n");
+                }
+                else if ((((((f_mes==1||f_mes==3||f_mes==5||f_mes==7||f_mes==8||f_mes==10||f_mes==12)&& f_dia<=31 )||//anos nao bissextos
+                    ((f_mes==4||f_mes==6||f_mes==9||f_mes==11)&& f_dia<=30)||//anos nao bissextos
+                    (f_mes==2&& f_dia<=28))&&f_ano%4!=0)||//anos nao bissextos
+
+                    ((((f_mes==1||f_mes==3||f_mes==5||f_mes==7||f_mes==8||f_mes==10||f_mes==12)&& f_dia<=31)||//anos bissextos
+                    ((f_mes==4||f_mes==6||f_mes==9||f_mes==11)&& f_dia<=30)||//anos bissextos
+                    (f_mes==2&& f_dia<=29))&&(f_ano%4==0 ||//anos bissextos
+                    (f_ano!=400||f_ano!=800||f_ano!=1200||f_ano!=1600||f_ano!=2000||f_ano!=2400||f_ano!=2800||f_ano!=3200||//anos bissextos
+                    f_ano!=3600||f_ano!=4000||f_ano!=4400||f_ano!=4800||f_ano!=5200||f_ano!=5600||f_ano!=6000||f_ano!=6400||//anos bissextos
+                    f_ano!=6800||f_ano!=7200||f_ano!=7600||f_ano!=8000||f_ano!=8400||f_ano!=8800||f_ano!=9200||f_ano!=9600||//anos bissextos
+                    f_ano!=1000)))) && f_mes<=12)
+                    {
+                    printf("a data introduzida foi %d,%d,%d?\n",f_ano,f_mes,f_dia);
+                    do
+                    {
+                        printf("escreva 'y' -> sim e 'n' -> nao\n");
+                        fflush(stdin);
+                        scanf("%c",&x);
+                        if (x == 121)
+                        {
+                        break;
+                        }
+                    } while( x!= 110 && x!=121);
+                    if (x == 121)
+                    {
+                        do_ok=1;
+                        break;
+                    }
+
+                    else
+                    {
+                        repeat=1;
+                        do_ok=0;
+                    }
+                    }
+
+        }while(do_ok!=1 && repeat!=0 && f_dia>0 && f_ano>0);
+        percentagem=0;
+        for (i=0;i<10;i++)
+        {
+            for (x=0;x<100;x++)
+            {
+                if (reg_intre[i].data_intrevencao.dia==f_dia&& reg_intre[i].data_intrevencao.mes==f_mes && reg_intre[i].data_intrevencao.ano==f_ano && f_dia>1)
+                {
+                    f_dia=f_dia-1;
+                    percentagem=percentagem+1;
+                }
+                if (reg_intre[i].data_intrevencao.dia==f_dia&& reg_intre[i].data_intrevencao.mes==f_mes && reg_intre[i].data_intrevencao.ano==f_ano && f_dia==1 && f_mes>1&&
+                (f_mes==5 ||f_mes==7 ||f_mes==8 ||f_mes==10 ||f_mes==12)) // passagem de mes com 31 ->30 dias sem mudanca de ano
+
+                {
+                    f_mes=f_mes-1;
+                    f_dia=30;
+                    percentagem=percentagem+1;
+                }
+                if  (reg_intre[i].data_intrevencao.dia==f_dia&& reg_intre[i].data_intrevencao.mes==f_mes && reg_intre[i].data_intrevencao.ano==f_ano && f_dia==1 && f_mes>1&&
+                    (f_mes==4||f_mes==6 ||f_mes==9 ||f_mes==11 ||f_mes==1 || f_mes==2))  // passagem de mes com 30 ->31 dias sem mudanca de ano
+                {
+                    f_mes=f_mes-1;
+                    f_dia=31;
+                    percentagem=percentagem+1;
+                }
+                ////////////////////////// sem mudanca de ano/////////////////////////////
+                if (reg_intre[i].data_intrevencao.dia==f_dia&& reg_intre[i].data_intrevencao.mes==f_mes && reg_intre[i].data_intrevencao.ano==f_ano && f_dia==1 && f_mes==1&&
+                (f_mes==4||f_mes==6 ||f_mes==9 ||f_mes==11 ||f_mes==1 || f_mes==2)) // passagem de mes com 31 ->30 dias sem mudanca de ano
+
+                {
+                    f_ano=f_ano-1;
+                    f_mes=12;
+                    f_dia=30;
+                    percentagem=percentagem+1;
+                }
+                if (reg_intre[i].data_intrevencao.dia==f_dia&& reg_intre[i].data_intrevencao.mes==f_mes && reg_intre[i].data_intrevencao.ano==f_ano && f_dia==1 && f_mes==1&&
+                     (f_mes==4||f_mes==6 ||f_mes==9 ||f_mes==11 ||f_mes==1 || f_mes==2))// passagem de mes com 30 ->31 dias sem mudanca de ano
+                {
+                    f_ano=f_ano-1;
+                    f_mes=12;
+                    f_dia=31;
+                    percentagem=percentagem+1;
+                }
+
+                ////////////////////////// com mudanca de ano/////////////////////////////
+                if (reg_intre[i].data_intrevencao.dia==f_dia&& reg_intre[i].data_intrevencao.mes==f_mes && reg_intre[i].data_intrevencao.ano==f_ano && f_dia==1 && f_mes==3)
+                    {
+                        f_mes=2;
+                        f_dia=28;
+                        percentagem=percentagem+1;
+                    }
+            }
+        }
+        fazer mensagem de percentagem
+
+
+
         break;
 
         case 5 :
-
         printf("\nA quantidade de computadores avariados e de : %d",numero.n_avariados);
         break;
 
@@ -1360,3 +1647,4 @@ void guardar(t_pc novo_pc[], t_solicitacao nova_intre[], t_intrevencao reg_intre
     fwrite(&numero, sizeof(cont), 1, fptr_bin);
     fclose(fptr_bin);
 }
+

@@ -1,4 +1,4 @@
-     #include <stdio.h>
+    #include <stdio.h>
     #include <string.h>
     #include <stdlib.h>
     #include <time.h>
@@ -35,7 +35,7 @@
     char n_id_computador[25];
     t_data data_intrevencao;
     char designacao_problema [100];
-    int numero_pc_pelo_id,resolvido;
+    int numero_vetor1,resolvido;
     }t_solicitacao;
 
     typedef struct
@@ -76,8 +76,6 @@ int main ()
         {
         printf("Erro na abertura.");
         }
-
-
         do
         {
             do
@@ -897,7 +895,7 @@ void adc_intrevencao(t_solicitacao nova_intre [],cont numero,t_pc novo_pc[])
 
          strcpy(nova_intre[numero.n_soli_intre].codigo_intrevencao,f_codigo_intrevencao);
 
-         nova_intre[numero.n_soli_intre].numero_pc_pelo_id=numero_id_pc;
+         nova_intre[numero.n_soli_intre].numero_vetor1=numero_id_pc;
 
          nova_intre[numero.n_soli_intre].resolvido=0;
 
@@ -912,7 +910,7 @@ void adc_intrevencao(t_solicitacao nova_intre [],cont numero,t_pc novo_pc[])
 
 void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_intre[],cont numero, FILE *fptr_log)
 {
-    int f_dia,f_mes,f_ano,do_ok,i,x,z,y,valor,repeat,contador,numero_intrevencao, x_intrevencao;
+    int f_dia,f_mes,f_ano,do_ok,i,x,z,y,valor,repeat,contador,numero_intrevencao, vetor_intrevencao;
     char f_descricao_intrevencao [100],f_solicitacao_intrevencao [25], ask;
     float f_custo_intrevencao;
     ////////////////////////////////////////////////////////////////////
@@ -922,7 +920,7 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
         x=0;
         z=0;
         y=0;
-        x_intrevencao=0;
+        vetor_intrevencao=0;
         i=0;
         valor=0;
         do_ok=0;
@@ -944,7 +942,7 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
             {
                 for (x=0; x<100;x++)
                 {
-                    x_intrevencao=x;
+                    vetor_intrevencao=x;
                     valor=strcmp(nova_intre[x].codigo_intrevencao,f_solicitacao_intrevencao);
                     if (valor!=0 && x!=numero.n_soli_intre)
                     {
@@ -953,7 +951,7 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
                     {
                         for (y=0;y<100;y++)
                         {
-                            if (x==nova_intre[y].numero_pc_pelo_id && y<=numero.n_soli_intre-1 && nova_intre[y].resolvido==1)
+                            if (y<=numero.n_soli_intre-1 && nova_intre[y].resolvido==1)
                             {
                                 numero_intrevencao=y;
                                 contador=contador+1;
@@ -1151,20 +1149,20 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
                 }
                 else if (contador >0)
                 {
-                    if (f_custo_intrevencao>novo_pc[nova_intre[numero_intrevencao].numero_pc_pelo_id].valor_Equip)
+                    if (f_custo_intrevencao>novo_pc[nova_intre[numero_intrevencao].numero_vetor1].valor_Equip)
                     {
                         do_ok=1;
                         do
                         {
                         ask=0;
-                        printf("\no arranjo nao se justifica,\npretende passar o seu computador para avariado??");
-                        printf("\n'y' -> yes , 'n' -> nao??");
+                        printf("\no arranjo nao se justifica,\npretende passar o seu computador para avariado?");
+                        printf("\n'y' -> yes , 'n' -> nao\n");
                         fflush(stdin);
                         scanf("%c", &ask);
 
                             if(ask==121)
                             {
-                                strcpy(novo_pc[nova_intre[numero_intrevencao].numero_pc_pelo_id].estado_do_pc,"3");
+                                strcpy(novo_pc[nova_intre[numero_intrevencao].numero_vetor1].estado_do_pc,"3");
                             }
                         }while (ask!=121 && ask!=110);
                     }
@@ -1176,10 +1174,9 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
             }
         }while (do_ok!=1);
 
-   //     strcpy(reg_intre[numero.n_regis_intre].numero_id,nova_intre[y].numero_pc_pelo_id);
         strcpy(reg_intre[numero.n_regis_intre].descricao_intrevencao,f_descricao_intrevencao);
 
-        nova_intre[x_intrevencao].resolvido=1;
+        nova_intre[vetor_intrevencao].resolvido=1;
 
         reg_intre[numero.n_regis_intre].data_intrevencao.ano=f_ano;
         reg_intre[numero.n_regis_intre].data_intrevencao.mes=f_mes;
@@ -1188,8 +1185,8 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
         reg_intre[numero.n_regis_intre].custo_intrevencao=f_custo_intrevencao;
 
         fprintf(fptr_log, "\tDados da Intervencao com o codigo %s\n", f_solicitacao_intrevencao);
-        fprintf(fptr_log, "Nome do Colaborador: %s", novo_pc[nova_intre[x_intrevencao].numero_pc_pelo_id].nome_colaborador_pc );
-        fprintf(fptr_log, "Estado do Computador: %s", novo_pc[nova_intre[x_intrevencao].numero_pc_pelo_id].estado_do_pc );
+        fprintf(fptr_log, "Nome do Colaborador: %s", novo_pc[nova_intre[vetor_intrevencao].numero_vetor1].nome_colaborador_pc );
+        fprintf(fptr_log, "Estado do Computador: %s", novo_pc[nova_intre[vetor_intrevencao].numero_vetor1].estado_do_pc );
         fprintf(fptr_log, "Data da intervencao: %d-%d-%d\n", f_ano, f_mes, f_dia);
         fprintf(fptr_log, "Descricao da intervencao: %s\n", f_descricao_intrevencao);
         fprintf(fptr_log, "Custo da intervencao: %f\n", f_custo_intrevencao);
