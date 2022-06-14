@@ -641,7 +641,12 @@ void adc_computador(t_pc novo_pc[],cont numero)                 //funcao onde o 
 }
 
 void adc_intrevencao(t_solicitacao nova_intre [],cont numero,t_pc novo_pc[])
-{                                                               //funcao onde o ultilizador introduz informacao para a criacao de uma
+{                                                                       //funcao onde o ultilizador introduz informacao para a criacao de uma solicitacao ,
+                                                                        //de intrevencao tais como , designacao, data, codigo de intrevencao e numero de indentificacao do
+                                                                        // pc  depois da introducao esses valores serao guardados num vetor de estrutura,para o bom
+                                                                        //funcionamento serao necessarias (t_solicitacao nova_intre [],cont numero,t_pc novo_pc[])
+                                                                        //poque serao o sitio onde a funcao ira buscar e armazenar a informacao.
+                                                                        //so podera ser feito com codigos de ids criados, na funcao adc_computador
     int f_dia,f_mes,f_ano,do_ok,i,x,z,y,valor,repeat,numero_id_pc;
     char f_designacao_problema [100],f_n_id_computador[25],f_codigo_intrevencao[25];
 
@@ -922,6 +927,14 @@ void adc_intrevencao(t_solicitacao nova_intre [],cont numero,t_pc novo_pc[])
 
 void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_intre[],cont numero, FILE *fptr_log)
 {
+                                                                        //funcao onde o ultilizador introduz informacao para a criacao de um registro de intrevencao,
+                                                                        //de intrevencao tais como , designacao, data, codigo de intrevencao e custo de intrevencao,
+                                                                        //depois da introducao esses valores serao guardados num vetor de estrutura,para o bom
+                                                                        //funcionamento serao necessarias (t_pc novo_pc [],t_solicitacao nova_intre[],
+                                                                        //t_intrevencao reg_intre[],cont numero, FILE *fptr_log),
+                                                                        //poque serao o sitio onde a funcao ira buscar e armazenar a informacao.
+                                                                        //so podera ser feito com codigos de solicitacao criados na funcao adc_intrevencao,
+                                                                        //ira tambem guardar a informacao de todos os computares que passsem nesta funcao num ficheiro "dados.log"
     int f_dia,f_mes,f_ano,do_ok,i,x,z,y,valor,repeat,contador,numero_intrevencao, vetor_intrevencao;
     char f_descricao_intrevencao [100],f_solicitacao_intrevencao [25], ask;
     float f_custo_intrevencao;
@@ -1211,6 +1224,9 @@ void adc_registo(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_in
 
 void adc_listar(t_pc novo_pc[],t_solicitacao nova_intre[],t_intrevencao reg_intre[],cont numero)
 {
+                                                                //funcao onde sera mostrada uma lista pedida pelo utilizador com informacoes
+                                                                //com base em (t_pc novo_pc[],t_solicitacao nova_intre[],t_intrevencao reg_intre[],cont numero),
+                                                                //e sera mostrada ao utilizador sintetizada
     int do_ok,i,x,z,y,repeat,valor,n1,n2,n_id;
     char opcao;
     char f_n_id_computador[100],f_solicitacao_intrevencao[100];
@@ -1463,6 +1479,8 @@ void adc_listar(t_pc novo_pc[],t_solicitacao nova_intre[],t_intrevencao reg_intr
 
 void informacaoes(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_intre[],cont numero)
 {
+                                                                //funcao onde sera mostrado as informacoes de uma forma mais geral sobre os dados,
+                                                                //adquiridos com base em(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_intre[],cont numero)
     int opcao,x,y,z,i,f_dia,f_mes,f_ano,do_ok,repeat,percentagem;
     printf("\n1 -> Quantidade de computadores em cada estado\n2 -> Custo medio por cada intervenção efetuada nos computadores\n3 -> Intervencao/oes com o menor custo\n");
     printf("4 -> Percentagem de intervenções efetuadas em menos de 10 dias\n5 -> Quantidade de computadores que ja avariaram\n\nSelecione uma opcao:\n");
@@ -1646,6 +1664,7 @@ void informacaoes(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_i
 
 void guardar(t_pc novo_pc[], t_solicitacao nova_intre[], t_intrevencao reg_intre[], cont numero)
 {
+                                                                //funcao onde e feito o guardar dos dados adquiridos num ficheiro escolhido pelo utilizador
     char ficheiro[100];
     printf("Insira o nome do ficheiro que guardar: ");
     fflush(stdin);
