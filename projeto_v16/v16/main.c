@@ -1,37 +1,36 @@
     #include <stdio.h>
     #include <string.h>
     #include <stdlib.h>
-    #include <time.h>
 
 
 
-    void funcao_menu (novo_pc,numero);
-    void adc_computador(novo_pc,numero);
-    void adc_intrevencao(nova_intre,numero,novo_pc);
-    void adc_registo(novo_pc,nova_intre,reg_intre,numero,fptr_log);
-    void adc_listar(novo_pc, nova_intre, reg_intre, numero);
-    void informacaoes(novo_pc,nova_intre,reg_intre,numero);
-    void guardar(novo_pc, nova_intre, reg_intre, numero);
+    void funcao_menu (novo_pc,numero);                              //funcao criada para aparecer o menu inicial
+    void adc_computador(novo_pc,numero);                            //funcao criada para adicionar um novo computador
+    void adc_intrevencao(nova_intre,numero,novo_pc);                //funcao criada para adicionar uma nova solicitacao de intrevncao
+    void adc_registo(novo_pc,nova_intre,reg_intre,numero,fptr_log); //funcao criada para adicionar um registo
+    void adc_listar(novo_pc, nova_intre, reg_intre, numero);        //funcao criada para visualizar uma lista de informacoes referentes aos computadores
+    void informacaoes(novo_pc,nova_intre,reg_intre,numero);         //funcao criada para visualizar informacoes sobre os computadores
+    void guardar(novo_pc, nova_intre, reg_intre, numero);           //funcao criada para guardar a informacao num ficheiro
 
 
     typedef struct
     {
-    int dia, mes, ano;
-    }t_data;
+    int dia, mes, ano;                                              //memorias onde seram guardados os dias/meses/anos
+    }t_data;                                                        //estrutura criada para fazer referencia a datas
 
     typedef struct
-    { // e struct designe para guardar a info sobre pcs
-    char numero_id[25];
-    char designacao [100] ;
-    char nome_colaborador_pc [100];
-    t_data data_atribuicao;
-    char estado_do_pc [100];
-    float valor_Equip;
-    }t_pc;
+    {
+    char numero_id[25];                                             //string onde ira ser guardada o numero de id do computador
+    char designacao [100] ;                                         //string onde ira ser guardada uma designacao acerca do computador
+    char nome_colaborador_pc [100];                                 //string onde ira ser guardado o nome do colaborador a que o computador for atribuido
+    t_data data_atribuicao;                                         //local onde as datas iram ser guardadas fazendo referencia a estrutura "t_data"
+    char estado_do_pc [100];                                        //string onde ira ser guardado o estado do computador (1->operacional,2->por intrevencao,3->avariado)
+    float valor_Equip;                                              //local onde ira ser guardado o valor do computador
+    }t_pc;                                                          //estrutura criada para fazer referencia para guardar as informacoes necessarias para a criacao de um novo computador
 
     typedef struct
-    { // e struct designe para guardar a info sobre solicitacoes de intrevencaos
-    char codigo_intrevencao[25] ;
+    {
+    char codigo_intrevencao[25] ;                                   //
     char n_id_computador[25];
     t_data data_intrevencao;
     char designacao_problema [100];
