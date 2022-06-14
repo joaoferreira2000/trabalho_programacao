@@ -26,60 +26,68 @@
     t_data data_atribuicao;                                         //local onde as datas iram ser guardadas fazendo referencia a estrutura "t_data"
     char estado_do_pc [100];                                        //string onde ira ser guardado o estado do computador (1->operacional,2->por intrevencao,3->avariado)
     float valor_Equip;                                              //local onde ira ser guardado o valor do computador
-    }t_pc;                                                          //estrutura criada para fazer referencia para guardar as informacoes necessarias para a criacao de um novo computador
+    }t_pc;                                                          //estrutura criada para fazer referencia as informacoes necessarias para a criacao de um novo computador
 
     typedef struct
     {
-    char codigo_intrevencao[25] ;                                   //
-    char n_id_computador[25];
-    t_data data_intrevencao;
-    char designacao_problema [100];
-    int numero_vetor1,resolvido;
-    }t_solicitacao;
-
-    typedef struct
-    { // e struct designe para guardar a info sobre intrevencoes registadas
-    char codigo_intrevencao[25] ;
-    char descricao_intrevencao[25];
-    char numero_id[25];
-    t_data data_intrevencao;
-    float custo_intrevencao;
-    }t_intrevencao;
+    char codigo_intrevencao[25] ;                                   //string onde ira ser guardado o codigo de intrevencao
+    char n_id_computador[25];                                       //string onde ira ser guardado nº de id sobre o qual esta solicitacao foi feita
+    t_data data_intrevencao;                                        //local onde as datas iram ser guardadas fazendo referencia a estrutura "t_data"
+    char designacao_problema [100];                                 //string onde ira ser guardada uma designacao acerca do computador
+    int numero_vetor1;                                              //sitio onde guarda o numero do pc(0-24) sobre qual a solicitacao foi feita
+    int resolvido;                                                  //sitio guardamos se a solicitacao ja foi resolvida ou nao (0->por resolver/1->resolvido)
+    }t_solicitacao;                                                 //estrutura criada para fazer referencia as informacoes necessarias para criacao de uma solicitacao de intrevencao
 
     typedef struct
     {
-    int n_pcs, n_soli_intre, n_regis_intre, n_operacional, n_por_intrevencao, n_avariados;
-    float valor_total,custo_medio_intrevencoes, menor_valor;
-    }cont;
+    char codigo_intrevencao[25] ;                                   //string onde sera guardada o codigo de solicitacao de intrevencao
+    char descricao_intrevencao[25];                                 //string onde sera guardada uma breve designacao do problema
+    char numero_id[25];                                             //string onde sera guardado o numero de id sobre o qual a solicitacao de intrevencao foi feita
+    t_data data_intrevencao;                                        //local onde as datas iram ser guardadas fazendo referencia a estrutura "t_data"
+    float custo_intrevencao;                                        //local onde sera guardado o custo da intrevencao feita
+    }t_intrevencao;                                                 //estrutura criada para fazer referencia as informacoes necessarias para o registro de intrevencoes
+
+    typedef struct
+    {
+    int n_pcs;                                                      //sitio onde vai ser guardado o numero de computadores feitos
+    int n_soli_intre;                                               //sitio onde vai ser guardado o numero de solicitacoes de intrevencoes feitas
+    int n_regis_intre;                                              //sitio onde vai ser guardado o numero de registros de intrevencoes feitas
+    int n_operacional;                                              //sitio onde vai ser guardado o numero de computadores operacionais
+    int n_por_intrevencao;                                          //sitio onde vai ser guardado o numero de computadores por intrevencao
+    int n_avariados;                                                //sitio onde vai ser guardado o numero de computadores avariado
+    float valor_total;                                              //sitio onde vai ser guardado o custo total dos computadores
+    float custo_medio_intrevencoes;                                 //sitio onde vai ser guardado o custo medio de intrevencoes
+    float menor_valor;                                              //sitio onde vai ser guardado o menor custo das intrevencoes
+    }cont;                                                          //estrutura de apoio para passagem de dados no programa
 
 
 
 int main ()
 {
-        cont numero;
-        t_pc novo_pc[25];
-        t_solicitacao nova_intre[100];
-        t_intrevencao reg_intre[100];
-        numero.n_pcs=0;
+        cont numero;                                                //criacao de 1 vetor para a estrutura de apoio
+        t_pc novo_pc[25];                                           //criacao de 25 vetores para guardar a informacao de 25 novos computadores
+        t_solicitacao nova_intre[100];                              //criacao de 100 vetores para guardar a informacao de 100 novas solicitacoes de intrevencao
+        t_intrevencao reg_intre[100];                               //criacao de 100 vetores para guardar a informacao de 100 novos registros de intrevencao
+        numero.n_pcs=0;                                             //nos proximos passos vamos zerar todos os apoios necessarios para o funcionamento do programa
         numero.n_soli_intre=0;
         numero.n_regis_intre=0;
         numero.valor_total=0;
         numero.n_avariados=0;
         numero.n_operacional=0;
         numero.n_por_intrevencao=0;
-        int opcao,x,y,i,do_ok;
+        int opcao,x,y,i,do_ok;                                      //criacao de memorias de apoio
         char ficheiro[100],ask;
 
-        FILE *fptr_log;
+        FILE *fptr_log;                                             //abrimos o ficheiro log, ficheiro onde sera guardada a informacao de pcs avariados
         fptr_log = fopen("dados.log", "a+");
         if (fptr_log == NULL)
         {
         printf("Erro na abertura.");
         }
-        do
-        {
-            do
-            {
+        do                                                          //nos proximos passos e onde perguntamos ao utilizador se ele quer abrir um ficheiro,
+        {                                                           //com informacao de computadores ja guardada,(vamos perguntar ao utilizador se ele quer,
+            do                                                      //guardar informacao com um "yes or no", e depois o utilizador se escolher que sim,
+            {                                                       //podera escrever o nome do ficheiro)
             do_ok=0;
             ask='e';
             printf("quer abrir um ficheiro com informacao anteriormente guardado??\n\n'Y' -> Yes // 'N' -> No\n");
@@ -121,31 +129,31 @@ int main ()
 
         }
 
-        }while (do_ok!=1);
+        }while (do_ok!=1);                                      //aqui acaba a abertura de ficheiro
 
-    do{
-        numero.n_por_intrevencao=0;
+    do{                                                         //aqui inicia o loop do programa
+        numero.n_por_intrevencao=0;                             //aqui resetamos o estado do computador, irao ser calculados sempre que necessario
         numero.n_avariados=0;
         numero.n_operacional=0;
 
 
-        funcao_menu (novo_pc,numero);
+        funcao_menu (novo_pc,numero);                           //leitura do sitio para onde o utilizador quer ir
         fflush(stdin);
         scanf("%d",&opcao);
 
         switch (opcao)
         {
-        case 1 :
-        adc_computador(novo_pc,numero);
+        case 1 :                                                //sitio onde sera criado o registro de "um novo computador", sera tambem feito o calculo do,
+        adc_computador(novo_pc,numero);                         //valor total do custo dos computadores , e incrementado +1 ao valor total de computadores
         numero.valor_total=numero.valor_total+novo_pc[numero.n_pcs].valor_Equip;
         numero.n_pcs=numero.n_pcs+1;
         break;
 
 
-        case 2 :
-        if (numero.n_pcs==0)
+        case 2 :                                                //sitio onde sera criada uma nova solicitacao de intrevencao,tem de haver um minimo de 1,
+        if (numero.n_pcs==0)                                    //computador criado, ira incrementar +1 ao valor total de solicitacoes
         {
-            printf("\npor favor adicione um computador primeiro");
+        printf("\npor favor adicione um computador primeiro");
         }
         else if (numero.n_pcs>0)
         {
@@ -154,10 +162,10 @@ int main ()
         }
         break;
 
-        case 3 :
-        if (numero.n_soli_intre==0)
-        {
-            printf("\npor favor adicione uma solicitacao de intrevencao primeiro");
+        case 3 :                                                //sitio onde sera criado o registro de uma intrenvecao, tem de ter no minimo 1 solicitacao,
+        if (numero.n_soli_intre==0)                             //sera incrementado +1 ao valor de registro de intrevencao, e verifica se o codigo de intrevencao,
+        {                                                       //ja foi usado ou nao
+        printf("\npor favor adicione uma solicitacao de intrevencao primeiro");
         }
         else if (numero.n_soli_intre>0)
         {
@@ -176,12 +184,12 @@ int main ()
         break;
 
 
-        case 4 :
-            adc_listar(novo_pc, nova_intre, reg_intre, numero);
+        case 4 :                                               //sitio onde sera mostrado a lista de computadores, etc
+        adc_listar(novo_pc, nova_intre, reg_intre, numero);
         break;
 
 
-        case 5 :
+        case 5 :                                               //sitio onde sera mostrado a lista de informacao, e faz a contagem dos estados dos computadores
         if (numero.n_pcs==0)
         {
             printf("\npor favor adicione um computador primeiro");
@@ -207,7 +215,7 @@ int main ()
         }
         break;
 
-        case 6 :
+        case 6 :                                                //sitio onde se guarda a informacao obtida ate agora num ficheiro
         if (numero.n_pcs==0)
         {
             printf("\npor favor adicione um computador primeiro");
@@ -220,8 +228,8 @@ int main ()
 
 
 
-        case 0 :
-        do
+        case 0 :                                                //sitio onde se sai do programa, e onde se da a opcao de guardar a informacao num ficheiro,
+        do                                                      //antes de sair
         {
             do
             {
@@ -264,14 +272,14 @@ int main ()
         return 0;
         }
     }while(opcao!=0);
-    fclose(fptr_log);
+    fclose(fptr_log);                                           //fechamos o ficheiro log
 }
 
 
 
 
-void funcao_menu (t_pc novo_pc[], cont numero)
-{
+void funcao_menu (t_pc novo_pc[], cont numero)                  //funcao onde aparece a informacao processada dos dados basicos, e onde se dada a esolher ao,
+{                                                               //ultizador o sitio para onde navegar no programa
         printf("\n\n\n\n\t\t\t\t\tGestao de Computadores Portateis\n\n");
         printf("Total de Computadores:%d \t\t\t",numero.n_pcs);
         printf("Valor dos Computadores(euros):%.2f\n",numero.valor_total);
@@ -289,11 +297,15 @@ void funcao_menu (t_pc novo_pc[], cont numero)
         printf("Selecione a Opcao:");
 }
 
-void adc_computador(t_pc novo_pc[],cont numero)
-{
+void adc_computador(t_pc novo_pc[],cont numero)                 //funcao onde o ultilizador introduz informacao para a criacao de um novo computador,
+{                                                               //tais como numero de id, designacao, data, nome do colaborador ,e valor do equipamento,
+                                                                //depois da introducao esses valores serao guardados num vetor de estrutura,para o bom
+                                                                //funcionamento serao necessarias (t_pc novo_pc[],cont numero),poque serao o sitio onde,
+                                                                //a funcao ira buscar e armazenar a informacao
         int  i,z,x,repeat,do_ok,valor,f_dia,f_mes,f_ano;
         char f_numero_id[25],f_designacao [100], f_nome_colaborador_pc [100], f_estado_do_pc [100],f_cdia[2], f_cmes [2],f_cano [4],char_apoio;
         float f_valor_Equip;
+        //todas as variaveis criadas acima sao de apoio a esta funcao de criacao de um novo computador
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         printf("\nIntroduza o Numero de Identificacao ate 25 numeros:\n");
@@ -309,14 +321,14 @@ void adc_computador(t_pc novo_pc[],cont numero)
             gets(f_numero_id);
             for (i=0; i<25;i++)
             {
-                if (f_numero_id[i]>=48 &&  f_numero_id[i]<=57)
+                if (f_numero_id[i]>=48 &&  f_numero_id[i]<=57) //verificacao de a string e toda composta por numeros
                 {
                 }
                 else if (f_numero_id[i]=='\0' && repeat==1)
                 {
                     break;
                 }
-                else if (f_numero_id[i]=='\0' && repeat==0)
+                else if (f_numero_id[i]=='\0' && repeat==0)    // nos pontos abaixo e onde se faz a validacao da informacao, nao podera haver ID´s iguais
                 {
                     for (x=0; x<25;x++)
                     {
@@ -355,7 +367,7 @@ void adc_computador(t_pc novo_pc[],cont numero)
        } while (do_ok!=1);
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-        printf("\nIntroduza uma designacao:\n");
+        printf("\nIntroduza uma designacao:\n"); //local onde e feita a atribuicao de uma designacao ao computador
         do
         {
             x=0;
@@ -368,7 +380,7 @@ void adc_computador(t_pc novo_pc[],cont numero)
             gets(f_designacao);
             for (i=0; i<100;i++)
             {
-                if ((f_designacao[i]>=48 &&  f_designacao[i]<=57)||
+                if ((f_designacao[i]>=48 &&  f_designacao[i]<=57)|| //verificacao da string para apenas letas , numeros , e espacos
                     (f_designacao[i]>=97 &&  f_designacao[i]<=122) ||
                     (f_designacao[i]>=65 &&  f_designacao[i]<=90) ||
                     (f_designacao[i]==32))
@@ -393,7 +405,7 @@ void adc_computador(t_pc novo_pc[],cont numero)
         }while (do_ok!=1);
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-        printf("\nIntroduza o nome do colaborador com o computador :\n");
+        printf("\nIntroduza o nome do colaborador com o computador :\n"); // local onde se faz a atribuicao do nome do colaborador para este computador
         do
         {
             x=0;
@@ -407,7 +419,7 @@ void adc_computador(t_pc novo_pc[],cont numero)
 
             for (i=0; i<100;i++)
             {
-                if ((f_nome_colaborador_pc[i]>=97 &&  f_nome_colaborador_pc[i]<=122) ||
+                if ((f_nome_colaborador_pc[i]>=97 &&  f_nome_colaborador_pc[i]<=122) || //verificacao da string para apenas letas e espacos
                     (f_nome_colaborador_pc[i]>=65 &&  f_nome_colaborador_pc[i]<=90) ||
                     (f_nome_colaborador_pc[i]==32))
                 {
@@ -438,9 +450,9 @@ void adc_computador(t_pc novo_pc[],cont numero)
         ////////////////////////////////////////////////////////////////////////////////////////////
         printf("\nIntroduza uma data de atribuicao no formatos : \nano ->\nmes ->\ndia ->\n");
         do
-        {
-            f_ano=0;
-            f_mes=0;
+        {                                               //local onde se faz a atribuicao de uma data para o computador , dentro dos parametros normais de uma,
+            f_ano=0;                                    //data, tais como limitacao de dias, meses e anos(bissexto), apenas numeros podem ser usados
+            f_mes=0;                                    //e necessaria validacao pela parte do ultilizador com um yes or nao
             f_dia=0;
             x=0;
             z=0;
@@ -530,8 +542,8 @@ void adc_computador(t_pc novo_pc[],cont numero)
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        printf("\nIntroduza o estado do computador:\n");
-
+        printf("\nIntroduza o estado do computador:\n");  // atribuicao de um estado para o computador quando criado
+                                                          // (1->operacional /2-> por intrevir / 3->avariado), apenas numeros podem ser escritos
         do
         {
             repeat=0;
@@ -574,8 +586,8 @@ void adc_computador(t_pc novo_pc[],cont numero)
 
         ////////////////////////////////////////////////////////////////////////////////////////////
 
-        printf("\nIntroduza o valor do computador :\n");
-
+        printf("\nIntroduza o valor do computador :\n"); //local onde e atribuido um valor ao computador, e necessaria validacao pela parte,
+                                                         //do ultilizador com um yes or nao
         do
         {
             repeat=0;
@@ -612,8 +624,8 @@ void adc_computador(t_pc novo_pc[],cont numero)
 
         }while (do_ok!=1);
 
-        strcpy(novo_pc[numero.n_pcs].numero_id,f_numero_id);
-
+        strcpy(novo_pc[numero.n_pcs].numero_id,f_numero_id);            // local onde se faz a passagem a informacao em memorias de apoio para o vetor de,
+                                                                        // estrutura onde sera guarda
         strcpy(novo_pc[numero.n_pcs].designacao,f_designacao);
 
         strcpy(novo_pc[numero.n_pcs].nome_colaborador_pc,f_nome_colaborador_pc);
@@ -629,7 +641,7 @@ void adc_computador(t_pc novo_pc[],cont numero)
 }
 
 void adc_intrevencao(t_solicitacao nova_intre [],cont numero,t_pc novo_pc[])
-{
+{                                                               //funcao onde o ultilizador introduz informacao para a criacao de uma
     int f_dia,f_mes,f_ano,do_ok,i,x,z,y,valor,repeat,numero_id_pc;
     char f_designacao_problema [100],f_n_id_computador[25],f_codigo_intrevencao[25];
 
