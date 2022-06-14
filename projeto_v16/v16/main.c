@@ -64,6 +64,15 @@
 
 int main ()
 {
+        //forcao main sera onde sera feito o guiamento do programa , todas as funcoes arrancao a partir do main e quando acabam, voltam para o main,
+        //e tambem onde estao criados os vetores de estrutura e onde e feito o zero geral as memorias necessarias para o bom funcionamento do programa,
+        //e onde sera aberto os ficheiros com informacoes guardadas anteriormente e seram carregadas no atual programa
+        //ira tambem abrir o ficheiro "dados.log" no inicio do programa e ira fecha-lo no final do programa,ira tambem perguntar ao utilizador se quer guardar a informacao,
+        //antes de fechar o programa,
+        //para o programa entrar nas funcoes criadas , foi feito um switch, para que o programa entre no "case" certo e ative a funcao certa , consuante a escolha do,
+        //utilizador
+
+
         cont numero;                                                //criacao de 1 vetor para a estrutura de apoio
         t_pc novo_pc[25];                                           //criacao de 25 vetores para guardar a informacao de 25 novos computadores
         t_solicitacao nova_intre[100];                              //criacao de 100 vetores para guardar a informacao de 100 novas solicitacoes de intrevencao
@@ -1505,7 +1514,7 @@ void informacaoes(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_i
         break;
 
         case 4 :
-            printf("\nIntroduza uma data de atribuicao no formatos : \nano ->\nmes ->\ndia ->\n");
+    /*        printf("\nIntroduza uma data de atribuicao no formatos : \nano ->\nmes ->\ndia ->\n");
         do
         {
             f_ano=0;
@@ -1651,7 +1660,7 @@ void informacaoes(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_i
         fazer mensagem de percentagem
 
 
-
+ */
         break;
 
         case 5 :
@@ -1664,7 +1673,8 @@ void informacaoes(t_pc novo_pc [],t_solicitacao nova_intre[],t_intrevencao reg_i
 
 void guardar(t_pc novo_pc[], t_solicitacao nova_intre[], t_intrevencao reg_intre[], cont numero)
 {
-                                                                //funcao onde e feito o guardar dos dados adquiridos num ficheiro escolhido pelo utilizador
+                                                                //funcao onde e feito o guardar dos dados adquiridos pelo programa,
+                                                                //num ficheiro escolhido pelo utilizador
     char ficheiro[100];
     printf("Insira o nome do ficheiro que guardar: ");
     fflush(stdin);
